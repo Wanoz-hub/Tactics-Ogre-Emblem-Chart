@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactics Ogre: Emblem Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f1e8; /* Parchment background */
+            color: #4a3f35; /* Dark brown text */
+        }
+        .table-container, .filter-container {
+            background-color: #e8e2d4; /* Light warm gray-brown */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #dcd3c3;
+        }
+        thead th {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #c8bba8; /* Muted medium brown */
+            color: #3B5323; /* Dark Green for better contrast */
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 0.65rem; /* Adjust size for pixel font */
+            letter-spacing: 0.05em;
+        }
+        tbody tr {
+            color: #3B5323; /* Set default text color for table body rows to dark green */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f0ebe0; /* Lighter cream for alternating rows */
+        }
+        tbody tr:hover {
+            background-color: #dcd3c3; /* Highlighted row on hover */
+        }
+        .filter-container {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        input[type="text"], input[type="search"] {
+            background-color: #fdf9f2; /* Light cream */
+            border-color: #c8bba8;
+            color: #4a3f35;
+        }
+        input[type="text"]:focus, input[type="search"]:focus {
+            --tw-ring-color: #a67b5b;
+        }
+        input[type="checkbox"] {
+            accent-color: #a67b5b; /* Warm brown accent */
+        }
+        .emblem-name {
+            font-family: 'Press Start 2P', cursive;
+            color: #a67b5b; /* Warm brown accent for emblem names - this will override the parent tr color */
+            font-weight: normal; /* Override bold for pixel font */
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+        .missable-tag {
+            font-family: 'Inter', sans-serif; /* Keep tag readable */
+            background-color: #a67b5b;
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            margin-left: 0.75rem;
+        }
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: #4a3f35;
+            font-size: 2rem; /* Adjusted from text-4xl */
+            line-height: 1.4;
+        }
+        .filter-label {
+            color: #3B5323;
+        }
+        .text-gray-400 {
+            color: #6e5f52; /* This will apply to the header subtitle */
+        }
+        .text-gray-500 {
+           color: #8b7d70;
+        }
+        .border-gray-700 {
+            border-color: #dcd3c3;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="font-bold">Tactics Ogre: Emblem Overview</h1>
+            <p class="text-lg text-gray-400 mt-2">An interactive and filterable guide to all emblems.</p>
+        </header>
+
+        <!-- Filter Controls -->
+        <div class="filter-container">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-2">
+                    <label for="search-input" class="block mb-2 text-sm font-medium filter-label">Search by Name</label>
+                    <input type="search" id="search-input" placeholder="e.g., Animal Hunter" class="w-full px-4 py-2 rounded-md border focus:outline-none focus:ring-2">
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium filter-label">Filter by Mode</label>
+                    <div id="mode-filters" class="flex flex-wrap gap-x-4 gap-y-2">
+                        <!-- Checkboxes will be inserted here by JS -->
+                    </div>
+                </div>
+                 <div>
+                    <label class="block mb-2 text-sm font-medium filter-label">Other Filters</label>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="missable-filter" class="w-4 h-4 rounded">
+                        <label for="missable-filter" class="ml-2 text-sm filter-label">Show Only Missable</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emblems Table -->
+        <div class="table-container overflow-x-auto">
+            <div class="max-h-[70vh] overflow-y-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="uppercase">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Emblem</th>
+                            <th scope="col" class="px-6 py-3">Image</th>
+                            <th scope="col" class="px-6 py-3">Effect</th>
+                            <th scope="col" class="px-6 py-3">How to Obtain</th>
+                            <th scope="col" class="px-6 py-3">Obtainable Modes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emblems-table-body">
+                        <!-- Table rows will be inserted here by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+         <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Data based on the Tactics Ogre: The Knight of Lodis guide. Emblems that are missable in one way or another are marked.</p>
+        </footer>
+    </div>
+
+    <script>
+        const emblemsData = [
+            { name: "Blood Reign", description: "Awarded for killing 25 foes. It terrifies enemies within 3 panels of the owner.", effect: "Non-undead foes within 3 panels suffer -1 to their Mental Gauge", obtain: "Kill 25 foes", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Dragon's Scale", description: "Honors one who slays at least 5 dragons. Required to change into a Dragoon, but the trust of dragons will be lost.", effect: "Dragoon class can be accessed; 50% penalty when persuading dragons", obtain: "Kill five dragons.", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Animal Hunter", description: "Honors one who slays at least 5 ferocious beasts. Trust from beasts will be lost.", effect: "50% penalty when persuading beasts", obtain: "Kill five beasts (non-humanoid, non-dragon) monsters", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Exorcist", description: "Commends one who vanquished 5 undead beings. It terrifies undead within three panels of the owner.", effect: "Undead enemies within three panels suffer -1 to Mental Gauge", obtain: "Banish five undead units from existence (use Exorcism/Faith!)", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Self Preservation", description: "Awarded for using a counterattack to finish off a foe. Increases counterattack ability.", effect: "Power increased when counterattacking", obtain: "Defeat a unit (undead foes count) via counterattack", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Berserk", description: "Awarded in praise of ability to kill with one strike. Affects changes in luck.", effect: "Biorhythm period is lengthened", obtain: "One-hit KO an enemy, through damage or effect", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Arbitration", description: "Awarded for persuading enemies to have a change of heart, without resorting to fighting. Increases persuasiveness.", effect: "Grants 30% persuading bonus", obtain: "Persuade five units", modes: ["Story"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Broken Heart", description: "Sympathetic (and pathetic) emblem presented to males who fail to persuade female foes. Decreases luck (even further)!", effect: "Biorhythm period is decreased", obtain: "Have a male character fail to persuade a female foe ten (10) times. MALE ONLY", modes: ["Story"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Vixen's Whisper", description: "Awarded for using feminine persuasions to befriend enemies. Required to become a Witch.", effect: "Witch class accessible", obtain: "Have a female character persuade a male foe (no monsters). FEMALE ONLY", modes: ["Story"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Sniper", description: "Awarded for accuracy in missile attacks. Increases agility.", effect: "+10 AGI", obtain: "Land five consecutive (damaging) crossbow/longbow attacks on unit(s). NOTE: The streak can extend into the next battle!", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Fist Fight", description: "Awarded to heroes who defeat enemies with their bare fists and no equipment. Their fists become even more lethal.", effect: "Fist damage increases (can improve archers' counterattack damage!)", obtain: "While having no equipment on, defeat an enemy with a punch. Using a counterattack is fine.", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Heavenly Spirit", description: "Awarded for healing comrades on the battlefield. Required to become a Priest.", effect: "Priest class accessible", obtain: "Heal twenty (20) damaged allies -- oneself counts -- with spells", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Don Quixote", description: "Warning for those who rush into battle hastily, suffering a brutal counterattack.", effect: "-10 INT", obtain: "Have a unit counterattacked for damage amounting to 75%+ of their HP", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Centurion", description: "A tribute to one who defeats all enemies on the battlefield. Increases power.", effect: "+20 STR", obtain: "Have one character defeat/persuade all enemies in a battle", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Charisma", description: "Honors extraordinary heroes with remarkable strength, intelligence, or agility.", effect: "Allies within three panels get +1 to Mental Gauge", obtain: "Obtain 350 permanent STR, INT, or AGI on a character", modes: ["Story", "Training"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Bullpen Ace", description: "Given to those 'belly-itchers' who couldn't 'hit the broad side of a barn' in battle, despite their MVP status in training.", effect: "Damage increases by 125%...in training.", obtain: "In training, defeat twenty (20) targets", modes: ["Training"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Bogus Hero", description: "All the training in the world won't amount to much if you choke on stage! This emblem's penalty can be negated by the emblem Miracle.", effect: "Critical hits cannot occur! =(", obtain: "Gain twenty (20) levels in Training mode", modes: ["Training"], missable: true, imageUrl: "YOUR_LINK_HERE" },
+            { name: "The Pen and the Sword", description: "Awarded for experience in hand to hand combat as well as the use of destructive magic. Required to become a Warlock.", effect: "Warlock class accessible", obtain: "Defeat 4 enemies with weapon attacks and 4 with magic/skills", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Gibe of the Fallen Angel", description: "Dishonorable emblem for clergy members who slay numerous living beings despite their sworn duty.", effect: "Alignment goes one step towards 'Chaos'", obtain: "Defeat three enemies with physical attacks as Cleric/Priest", modes: ["Story", "Quest", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Lancer", description: "Awarded for striking 2 enemies with one piercing attack. Required to become a Valkyrie.", effect: "Valkyrie class accessible", obtain: "Use a lance/whip and attack two units (enemy or ally) at once", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Philosopher's Stone", description: "Presented to spellcasters who effectively use area-effect spells to defeat many foes.", effect: "Siren class accessible", obtain: "Use an area-effect spell or skill to defeat 2 foes at the same time", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "War God", description: "Honors those who deal ferocious blows to their foes. Increases strength at the expense of intelligence.", effect: "+30 STR, -30 INT", obtain: "Inflict 200+ damage to one foe with one phys attack (or counterattack)", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Knight's Certificate", description: "Awarded to courageous warriors who attack head on. Required to become a knight.", effect: "Knight class accessible", obtain: "Attack foes fifteen (15) times from close-range, being one panel away and from the front/sides. Attacking from behind doesn't count!", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Book of Initiation", description: "Awarded for skill in dodging enemies' attacks. Required to become a Swordmaster.", effect: "Swordmaster class accessible", obtain: "Block/evade three (3) consecutive attacks", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Miracle", description: "Praises the miraculous dodging of an attack when nearing death. One miracle leads to another.", effect: "Critical Hit probability increases; Bogus Hero emblem effect nulled", obtain: "Block/evade attack in critical HP (5%)", modes: ["Story", "Quest", "Training", "Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Embodiment of Desires", description: "Recognizes expert treasure-hunting ability.", effect: "Buried treasure items are generally better", obtain: "Pick up five (5) buried items or item bags", modes: ["Story", "Training"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Archangel's Feather", description: "Presented by Archangel when dead are revived. Required to become an Angel Knight.", effect: "Angel Knight class accessible", obtain: "KO a unit and use Altar of Resurretion/Resurrection spell to revive", modes: ["Story", "Training"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "The Cycle of Life", description: "Designates character that has transmigrated to undead by Necromancy and is returned to original form by Reincarnation. Supports undead within three panels.", effect: "Undead allies within three panels get +1 to Mental Gauge", obtain: "KO a unit, use Necro'mancy on it, then use Reincarnation on it", modes: ["Story", "Training"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Mark of the Elite", description: "Praises those who fulfill the Winning Conditions with only a few characters.", effect: "Raises level by one (only if not max level of 50).", obtain: "Win battle with two or less allies in battle. Defeating enemies will work, just as persuasion methods. Guests count towards the total of 2 but can't obtain emblems until invited.", modes: ["Story"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Lucky Soldier", description: "Awarded for returning from a battle in VS Mode unscathed. Increases luck.", effect: "Biorhythm value is increased", obtain: "Win a battle in Vs. Mode without incurring any damage", modes: ["Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Mark of Valor", description: "Honors heroes who fulfill the winning condition in Vs. Mode. Stabilizes luck.", effect: "Biorhythm amplitude decreases", obtain: "Win a battle in Vs. Mode", modes: ["Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Veteran Soldier", description: "Awarded to all characters in a victorious battle in Vs. Mode. Increases the basic stats.", effect: "+15 STR, +15 INT, +15 AGI", obtain: "In Vs. Mode, defeat an enemy", modes: ["Vs. Mode"], missable: false, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Relix's Emblem", description: "Prestigious emblem for men who use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.", effect: "Mental Gauge permanently maxes out at +2.", obtain: "Experience all fourteen (14) male classes. Alphonse receives this once the game is defeated, to counteract him not being able to become an Angel Knight. MALE ONLY.", modes: ["Story", "Training"], missable: true, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Ripple's Emblem", description: "A tribute to women who use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.", effect: "Mental Gauge permanently maxes out at +2.", obtain: "Experience all fourteen (14) female classes. FEMALE ONLY.", modes: ["Story", "Training"], missable: true, imageUrl: "YOUR_LINK_HERE" },
+            { name: "Grozz Nuy's Emblem", description: "Emblem bestowed upon dragons that use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.", effect: "Mental Gauge permanently maxes out at +2.", obtain: "Experience all eight (8) classes. DRAGONS ONLY", modes: ["Story", "Training"], missable: true, imageUrl: "YOUR_LINK_HERE" },
+        ];
+        
+        const tableBody = document.getElementById('emblems-table-body');
+        const searchInput = document.getElementById('search-input');
+        const modeFiltersContainer = document.getElementById('mode-filters');
+        const missableFilter = document.getElementById('missable-filter');
+        
+        const allModes = [...new Set(emblemsData.flatMap(e => e.modes))].sort();
+        allModes.forEach(mode => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center';
+            div.innerHTML = `
+                <input type="checkbox" id="mode-${mode.toLowerCase().replace(' ', '-')}" value="${mode}" class="w-4 h-4 rounded mode-checkbox">
+                <label for="mode-${mode.toLowerCase().replace(' ', '-')}" class="ml-2 text-sm filter-label">${mode}</label>
+            `;
+            modeFiltersContainer.appendChild(div);
+        });
+        
+        const modeCheckboxes = document.querySelectorAll('.mode-checkbox');
+
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 px-6">No emblems found matching your criteria.</td></tr>`;
+                return;
+            }
+            data.forEach((emblem) => {
+                const originalIndex = emblemsData.findIndex(original => original.name === emblem.name);
+                const missableTag = emblem.missable ? '<span class="missable-tag">Missable</span>' : '';
+                const row = `
+                    <tr class="border-b border-gray-700 align-middle">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <span class="emblem-name">${originalIndex + 1}. ${emblem.name}</span>
+                                ${missableTag}
+                            </div>
+                            <p class="font-normal mt-2">${emblem.description}</p>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <img src="${emblem.imageUrl}" 
+                                 alt="Image for ${emblem.name}" 
+                                 class="w-16 h-16 object-contain inline-block" 
+                                 onerror="this.onerror=null;this.src='https://placehold.co/64x64/e8e2d4/4a3f35?text=N/A';">
+                        </td>
+                        <td class="px-6 py-4">${emblem.effect}</td>
+                        <td class="px-6 py-4">${emblem.obtain}</td>
+                        <td class="px-6 py-4">${emblem.modes.join(', ')}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        };
+        
+        const filterData = () => {
+             const searchTerm = searchInput.value.toLowerCase();
+            const selectedModes = [...modeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
+            const showOnlyMissable = missableFilter.checked;
+
+            let filteredData = emblemsData;
+
+            if (searchTerm) {
+                filteredData = filteredData.filter(emblem => 
+                    emblem.name.toLowerCase().includes(searchTerm) ||
+                    emblem.description.toLowerCase().includes(searchTerm) ||
+                    emblem.effect.toLowerCase().includes(searchTerm) ||
+                    emblem.obtain.toLowerCase().includes( searchTerm)
+                );
+            }
+
+            if (selectedModes.length > 0) {
+                filteredData = filteredData.filter(emblem => 
+                    selectedModes.every(mode => emblem.modes.includes(mode))
+                );
+            }
+            
+            if (showOnlyMissable) {
+                filteredData = filteredData.filter(emblem => emblem.missable);
+            }
+
+            renderTable(filteredData);
+        };
+
+        searchInput.addEventListener('input', filterData);
+        missableFilter.addEventListener('change', filterData);
+        modeCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', filterData);
+        });
+
+        // Initial Render
+        renderTable(emblemsData);
+    </script>
+
+</body>
+</html>
