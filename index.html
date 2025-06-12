@@ -36,6 +36,9 @@
             border: 2px solid #ca8a04; /* yellow-600 */
             backdrop-filter: blur(8px);
             transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .card-link:hover {
             transform: translateY(-10px);
@@ -48,22 +51,29 @@
 
     <div class="text-center">
         <h1 class="font-medieval text-5xl md:text-7xl text-yellow-300 font-bold mb-4 tracking-wider">Tactics Ogre</h1>
-        <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto">A collection of tools for The Knight of Lodis.</p>
+        <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto">A collection of tools and guides for The Knight of Lodis.</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <!-- Emblem Chart Link -->
-            <a href="emblems.html" class="card-link rounded-2xl p-8 shadow-lg">
+            <a href="emblems.html" class="card-link rounded-2xl p-8 shadow-lg h-48">
                 <h2 class="font-medieval text-3xl text-yellow-400 mb-3">Emblem Overview</h2>
-                <p class="text-gray-300">An interactive and filterable guide to all emblems in the game.</p>
+                <p class="text-gray-300">An interactive guide to all emblems in the game.</p>
             </a>
             
             <!-- Tarot Quiz Link -->
-            <a href="tarot.html" class="card-link rounded-2xl p-8 shadow-lg">
+            <a href="tarot.html" class="card-link rounded-2xl p-8 shadow-lg h-48">
                 <h2 class="font-medieval text-3xl text-yellow-400 mb-3">The Tarot of Destiny</h2>
-                <p class="text-gray-300">Answer the questions of the tarot to shape your starting path and party.</p>
+                <p class="text-gray-300">Shape your starting path and party with the tarot.</p>
+            </a>
+
+            <!-- Walkthrough Link -->
+            <a href="walkthrough_lutra_islands.html" class="card-link rounded-2xl p-8 shadow-lg h-48">
+                <h2 class="font-medieval text-3xl text-yellow-400 mb-3">Walkthrough</h2>
+                <p class="text-gray-300">A step-by-step guide through the main story battles.</p>
             </a>
         </div>
     </div>
 
 </body>
 </html>
+
