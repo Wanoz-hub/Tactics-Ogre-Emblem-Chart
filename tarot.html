@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactics Ogre - Tarot Questionnaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Tailwind gray-900 */
+        }
+        .font-medieval {
+            font-family: 'MedievalSharp', cursive;
+        }
+        .card {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .back-link {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background-color: rgba(55, 65, 81, 0.8);
+            color: #FBBF24;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid #4B5563;
+            transition: all 0.2s;
+            z-index: 50; /* Ensure it's above other elements */
+        }
+        .back-link:hover {
+            background-color: #FBBF24;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <a href="index.html" class="back-link">&larr; Back to Main</a>
+
+    <div id="app-container" class="w-full max-w-4xl mx-auto">
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center fade-in">
+            <h1 class="font-medieval text-4xl md:text-6xl text-yellow-300 font-bold mb-4 tracking-wider">The Tarot of Destiny</h1>
+            <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">Your journey is about to begin. Answer the questions of the tarot to shape the path that lies before you.</p>
+            <button id="start-btn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl shadow-lg shadow-yellow-400/20 transition-all duration-300 transform hover:scale-105">
+                Begin the Reading
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div id="question-container" class="text-center mb-8 md:mb-12">
+                <p id="progress-text" class="font-medieval text-yellow-400 mb-4 text-2xl"></p>
+                <h2 id="question-text" class="font-medieval text-3xl md:text-4xl leading-relaxed font-bold text-white"></h2>
+            </div>
+            <div id="answers-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Answer cards will be injected here -->
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden text-center bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl fade-in max-w-3xl mx-auto">
+            <h1 class="font-medieval text-4xl text-yellow-300 font-bold mb-6 tracking-wider">Your Path is Chosen</h1>
+            <div id="results-summary" class="space-y-4 text-left">
+                <!-- Results will be injected here -->
+            </div>
+            <button id="restart-btn" class="mt-8 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl shadow-lg shadow-yellow-400/20 transition-all duration-300 transform hover:scale-105">
+                Retake the Reading
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        const questions = [
+            { question: "THE BEARER ASKS: Bear which burden?", answers: [ { text: "Resolve", effect: { pts: 0, element: "Fire" } }, { text: "Truth", effect: { pts: -1, element: "Wind" } }, { text: "Sacrifice", effect: { pts: 1, element: "Earth" } }, { text: "Affection", effect: { pts: -1, element: "Ice" } } ] },
+            { question: "THE WANDERER ASKS: Wander which path?", answers: [ { text: "Belief", effect: { pts: -1, alignment: "Neutral", emblem: "Miracle" } }, { text: "Freedom", effect: { pts: 0, alignment: "Neutral", emblem: "Arbitration" } }, { text: "Wealth", effect: { pts: 0, alignment: "Lawful", emblem: "Embodiment of Desires" } }, { text: "Longevity", effect: { pts: 1, alignment: "Chaotic", emblem: "Fist Fight" } } ] },
+            { question: "THE BUILDER ASKS: Design which plan?", answers: [ { text: "Strife", effect: { pts: 1, element: "Wind" } }, { text: "Wisdom", effect: { pts: 1, element: "Ice" } }, { text: "Hatred", effect: { pts: 1, element: "Fire" } }, { text: "Prosperity", effect: { pts: 0, element: "Earth" } } ] },
+            { question: "THE SAGE ASKS: Swear which oath?", answers: [ { text: "Purity", effect: { pts: -1, alignment: "Lawful" } }, { text: "Revenge", effect: { pts: 1, alignment: "Chaotic" } }, { text: "Victory", effect: { pts: 1, alignment: "Neutral" } }, { text: "Fruition", effect: { pts: 0, alignment: "Chaotic" } } ] },
+            { question: "THE LEADER ASKS: Share which vision?", answers: [ { text: "Sadness", effect: { pts: 0, alignment: "Neutral" } }, { text: "Mercy", effect: { pts: -1, alignment: "Lawful" } }, { text: "Bliss", effect: { pts: -1, alignment: "Chaotic" } }, { text: "Terror", effect: { pts: 1, alignment: "Lawful" } } ] },
+            { question: "THE ALMIGHTY ASKS: Share which future?", answers: [ { text: "Glory", effect: { pts: 1, element: "Fire" } }, { text: "Peace", effect: { pts: 0, element: "Ice" } }, { text: "Change", effect: { pts: 0, element: "Wind" } }, { text: "Control", effect: { pts: -1, element: "Earth" } } ] }
+        ];
+
+        const rewardsByPoints = [
+            { range: [4, 6], troops: ["Ninja [M]", "Archer [F]", "Soldier [M]", "Soldier [F]"], items: ["Long Sword", "Cure Leaf x 20", "Cure Seed x 2", "Altar of Resurrection x 3"], stats: { HP: "+10", STR: "+10", AGI: "+04" } },
+            { range: [1, 3], troops: ["Wizard [F]", "Archer [M]", "Soldier [M]", "Soldier [F]"], items: ["Cure Leaf x 20", "Magic Leaf x 2", "Altar of Resurrection x 3"], stats: { HP: "+04", MP: "+06", STR: "+04", INT: "+04", AGI: "+06" } },
+            { range: [-3, 0], troops: ["Cleric [M]", "Ninja [F]", "Soldier [F]", "Soldier [M]"], items: ["Rapier", "Cure Leaf x 10", "Magic Leaf x 4", "Altar of Resurrection x 3"], stats: { HP: "+04", MP: "+04", STR: "+06", INT: "+06", AGI: "+04" } },
+            { range: [-6, -4], troops: ["Wizard [M]", "Cleric [F]", "Soldier [M]", "Soldier [F]"], items: ["Cure Leaf x 10", "Magic Leaf x 6", "Altar of Resurrection x 3"], stats: { MP: "+10", INT: "+10", AGI: "+04" } }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userResults = { pts: 0, elements: [], alignments: [], emblems: [] };
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const progressText = document.getElementById('progress-text');
+        const questionText = document.getElementById('question-text');
+        const answersGrid = document.getElementById('answers-grid');
+        const resultsSummary = document.getElementById('results-summary');
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userResults = { pts: 0, elements: [], alignments: [], emblems: [] };
+            startScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('fade-in');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            quizScreen.classList.remove('fade-in');
+            
+            setTimeout(() => {
+                progressText.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+                
+                const qText = question.question;
+                const parts = qText.split(':');
+                questionText.innerHTML = parts.length === 2 
+                    ? `${parts[0].trim()}:<br><span class="text-4xl md:text-5xl">${parts[1].trim()}</span>` 
+                    : qText;
+
+                answersGrid.innerHTML = '';
+                question.answers.forEach((answer, index) => {
+                    const cardHTML = `<div class="perspective-1000"><div class="card relative w-full h-48 cursor-pointer"><div class="card-face card-front absolute w-full h-full bg-gray-800 border-2 border-yellow-400 rounded-lg flex items-center justify-center p-4 text-center shadow-lg hover:bg-gray-700 hover:border-yellow-300 transition-colors duration-300"><span class="font-medieval text-2xl text-white tracking-wide">${answer.text}</span></div><div class="card-face card-back absolute w-full h-full bg-yellow-500 border-2 border-yellow-300 rounded-lg flex items-center justify-center p-4 text-center shadow-2xl shadow-yellow-400/20"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" class="text-gray-900"><path fill="currentColor" d="m9.55 18.2l-5.7-5.7l1.425-1.425L9.55 15.35l9.175-9.175L20.15 7.6z"/></svg></div></div></div>`;
+                    const cardWrapper = document.createElement('div');
+                    cardWrapper.innerHTML = cardHTML;
+                    cardWrapper.firstElementChild.addEventListener('click', () => selectAnswer(index));
+                    answersGrid.appendChild(cardWrapper);
+                });
+                
+                quizScreen.classList.add('fade-in');
+            }, 300);
+        }
+
+        function selectAnswer(answerIndex) {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                if(index === answerIndex) card.classList.add('is-flipped');
+                else card.parentElement.parentElement.style.opacity = '0.5';
+                card.parentElement.style.pointerEvents = 'none';
+            });
+
+            const { effect } = questions[currentQuestionIndex].answers[answerIndex];
+            userResults.pts += effect.pts;
+            if (effect.element) userResults.elements.push(effect.element);
+            if (effect.alignment) userResults.alignments.push(effect.alignment);
+            if (effect.emblem) userResults.emblems.push(effect.emblem);
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) displayQuestion();
+                else showResults();
+            }, 1500);
+        }
+        
+        function getRewardsByPoints(points) {
+            return rewardsByPoints.find(reward => points >= reward.range[0] && points <= reward.range[1]) || null;
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('fade-in');
+
+            const alignmentCounts = userResults.alignments.reduce((acc, val) => ({ ...acc, [val]: (acc[val] || 0) + 1 }), {});
+            const lawful = alignmentCounts.Lawful || 0;
+            const chaotic = alignmentCounts.Chaotic || 0;
+            const finalAlignment = lawful > chaotic ? "Lawful" : (chaotic > lawful ? "Chaotic" : "Neutral");
+
+            const rewards = getRewardsByPoints(userResults.pts);
+            
+            let rewardsHTML = '';
+            if (rewards) {
+                rewardsHTML = `<div class="mt-6 border-t border-yellow-400/30 pt-6"><h2 class="font-medieval text-2xl text-yellow-300 mb-4">Your Starting Boon</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm"><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Troops</h3><ul class="text-white space-y-1">${rewards.troops.map(t => `<li>- ${t}</li>`).join('')}</ul></div><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Items</h3><ul class="text-white space-y-1">${rewards.items.map(i => `<li>- ${i}</li>`).join('')}</ul></div><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Stat Boosts</h3><div class="text-white space-y-1">${Object.entries(rewards.stats).map(([stat, value]) => `<div><span class="font-semibold">${stat}:</span> <span class="text-yellow-300">${value}</span></div>`).join('')}</div></div></div></div>`;
+            }
+
+            resultsSummary.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Total Points:</p><p class="text-2xl font-bold text-yellow-300">${userResults.pts}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Final Alignment:</p><p class="text-2xl font-bold text-white">${finalAlignment}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Elemental Affinities:</p><p class="text-xl font-bold text-white">${userResults.elements.length > 0 ? userResults.elements.join(', ') : 'None'}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Emblems Earned:</p><p class="text-xl font-bold text-white">${userResults.emblems.length > 0 ? userResults.emblems.join(', ') : 'None'}</p></div></div>${rewardsHTML}`;
+        }
+        
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            startScreen.classList.add('fade-in');
+        }
+
+        startBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', restartQuiz);
+    </script>
+</body>
+</html>
