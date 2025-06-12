@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walkthrough</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #E5E7EB;
+        }
+        .font-medieval {
+            font-family: 'MedievalSharp', cursive;
+        }
+        .content-container {
+            background-color: rgba(31, 41, 55, 0.8);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #4B5563;
+            backdrop-filter: blur(4px);
+        }
+        thead th {
+            font-family: 'MedievalSharp', cursive;
+            background-color: #374151;
+            color: #FBBF24;
+            letter-spacing: 0.05em;
+        }
+        tbody tr:nth-child(even) {
+            background-color: rgba(55, 65, 81, 0.5);
+        }
+        .nav-link {
+            background-color: rgba(55, 65, 81, 0.8);
+            color: #FBBF24;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid #4B5563;
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            background-color: #FBBF24;
+            color: #111827;
+        }
+        .nav-link.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        select#battle-index {
+            background-color: #374151;
+            border-color: #4B5563;
+            color: #FBBF24;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FBBF24%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right .7em top 50%;
+            background-size: .65em auto;
+            padding-right: 2.5em;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="fixed top-0 left-0 right-0 p-4 md:p-6 z-10 flex justify-between items-center">
+        <a href="index.html" class="nav-link">&larr; Back to Main Hub</a>
+        <div class="relative">
+            <select id="battle-index" class="nav-link font-medieval text-lg">
+                <!-- Options will be populated by JS -->
+            </select>
+        </div>
+    </div>
+
+    <div id="walkthrough-content" class="max-w-4xl mx-auto pt-24">
+        <!-- Battle content will be rendered here by JavaScript -->
+    </div>
+
+    <script>
+    // --- BATTLE DATA ---
+    const battles = [
+        // Battle 1
+        { id: 'wk01', chapter: 'Chapter 1', name: 'Lutra Islands', difficulty: '1/10', mapSize: '13x11', winCondition: 'Defeat the leader (Bandit)', deployment: { player: '1 (Alphonse)', guest: '4', enemy: '4' }, enemies: [ { unit: 'Bandit [M] (Leader)', level: 3, hp: 151, spoils: 'Francisca', isLeader: true }, { unit: 'Soldier [M]', level: 1, hp: 130, spoils: 'Leather Hat' }, { unit: 'Soldier [F]', level: 1, hp: 130, spoils: 'Healing Leaf' }, { unit: 'Soldier [M]', level: 1, hp: 130, spoils: 'Cup of Life' } ], guests: [ { name: 'Rictor [M]', level: 3, hp: 173 }, { name: 'Justin [M]', level: 2, hp: 140 }, { name: 'Orson [M]', level: 2, hp: 116 }, { name: 'Lara [F]', level: 2, hp: 139 } ], strategy: [ "This battle serves as an introduction to the game's mechanics and is straightforward. The guest units are powerful and will handle most of the combat. Rictor will act as a healer, ensuring the party's survival.", "<strong>Protect Your Flank:</strong> Enemies will attempt to attack from the back for a tactical advantage. Position your units to prevent this, and try to do the same to them to increase damage and reduce the chance of counterattacks.", "<strong>Target the Leader for EXP:</strong> The enemy leader is a higher level than the other units. Attacking him will yield significantly more experience points. Have Alphonse focus his attacks on the leader when possible to maximize EXP gain. A killing blow on a higher-level enemy provides a substantial EXP bonus.", "<strong>Collect Item Bags:</strong> Defeated enemies may drop item bags containing useful curative items or equipment. Move a unit onto the tile with the bag to collect it. Any bags left on the battlefield at the end of the fight are automatically collected as war trophies." ], aftermath: "After the battle, a cutscene will play, and Ivanna will join your party." },
+        // Battle 2
+        { id: 'wk02', chapter: 'Chapter 1', name: 'Scabellum', difficulty: '2/10', mapSize: '18x16', winCondition: 'Defeat the leader (Wizard)', deployment: { player: '2 (Alphonse & Ivanna)', guest: '2', enemy: '4' }, enemies: [ { unit: 'Wizard [L] (Leader)', level: 3, hp: 115, spoils: 'Thunder Flare', isLeader: true }, { unit: 'Soldier [M]', level: 2, hp: 139, spoils: 'Stone of Swiftness' }, { unit: 'Soldier [M]', level: 2, hp: 136, spoils: 'Healing Leaf' }, { unit: 'Soldier [M]', level: 2, hp: 136, spoils: 'Short Bow' } ], guests: [ { name: 'Rictor [M]', level: 4, hp: 181 }, { name: 'Orson [M]', level: 3, hp: 121 } ], strategy: [ "Before the battle, Ivanna can provide a tutorial on the game's elemental system. Knights in this game can use low-level virtue spells, making Ivanna a capable secondary healer.", "<strong>Reinforcements Arrive:</strong> On Turn 3, Rictor and Orson will appear on the eastern side of the map, providing significant support and an additional healer.", "<strong>Terrain Advantage:</strong> The enemy wizard uses lightning magic. Keep your units on Stone Floor or Ground terrain to gain a defensive bonus against lightning-based attacks.", "<strong>Buried Treasure:</strong> There is a Dragon Shield at coordinate [15,2] and a Claymore or Great Bow at [7,12]. The Dragon Shield requires a flying or water-walking unit to reach. You can return here later in Training Mode with appropriate units (like a Ninja or Hawkman) to collect these items." ], aftermath: `<p>After the battle, you will receive <strong>3500 Goth</strong>. The Shop, Organize, and Training options become available on the world map, and the units determined by the Tarot reading will join your party.</p><ul class="list-disc list-inside space-y-3 pl-2 mt-4"><li><strong>Recruiting:</strong> You can now hire new units. Hawkmen are highly recommended if available due to their flight capability. Consider starting the process to recruit the unique character Deneb.</li><li><strong>Class Management:</strong> It is advisable to temporarily change Alphonse and other male soldiers to the Beast Tamer class and then back. This class can become permanently unavailable if you defeat 5 beast-type units before accessing it.</li><li><strong>Looting Tip:</strong> A profitable strategy is to persuade enemy units to join you, strip them of their equipment, and then dismiss them from your party. You can sell their gear for extra Goth.</li></ul>` },
+        // Battle 3
+        { id: 'wk03', chapter: 'Chapter 1', name: 'Vespa', difficulty: '3/10', mapSize: '14x18', winCondition: 'Defeat the leader (Archer)', deployment: { player: 'Up to 6', guest: '1', enemy: '7' }, enemies: [ { unit: 'Archer [L]', level: 6, hp: 142, spoils: 'Great Bow', isLeader: true }, { unit: 'Bandit', level: 5, hp: 164, spoils: 'Stone of Swiftness' }, { unit: 'Bandit', level: 5, hp: 163, spoils: 'Cup of Life' }, { unit: 'Soldier', level: 5, hp: 163, spoils: 'Healing Leaf' }, { unit: 'Soldier', level: 5, hp: 163, spoils: 'Sword Emblem' }, { unit: 'Soldier', level: 5, hp: 167, spoils: 'Healing Leaf' }, { unit: 'Soldier', level: 5, hp: 160, spoils: 'Crown of Intellect' } ], guests: [ { name: 'Ivanna', level: 4, hp: 155 } ], strategy: [ "This battle features no magic users, so elemental resistances from terrain are not a factor. Sticking together is a viable strategy.", "One soldier is equipped with a Long Sword, which is a good item to obtain via persuasion if you haven't found a Claymore yet.", "Keep an eye on your units' health, as it's possible for one to be quickly overwhelmed. Have healing items ready.", "Archers are more effective from high ground. Force them downhill to reduce their range and effectiveness." ], aftermath: `<p>After the battle, you have the option to let Ivanna join your party permanently. It's recommended to accept her offer. Note that if you change her class, she cannot become a Knight again until her stats are high enough.</p><ul class="list-disc list-inside space-y-3 pl-2 mt-4"><li><strong>Glycinia Sighting #1:</strong> A special fairy can be encountered in a random battle at Vespa before proceeding to Formido.</li><li><strong>Buried Treasure:</strong> A Glass Pumpkin can be found at tile [06,03].</li><li><strong>Class Management:</strong> Check if any female characters can become Dragon Tamers. This class is easily locked out if you kill a dragon before changing into it.</li></ul>` },
+        // Battle 4
+        { id: 'wk04', chapter: 'Chapter 1', name: 'Formido', difficulty: '3.5/10', mapSize: '13x13', winCondition: 'Defeat the leader (Knight)', deployment: { player: 'Up to 6', guest: '0', enemy: '8' }, enemies: [ { unit: 'Knight [L]', level: 8, hp: 180, spoils: 'Chain Mail', isLeader: true }, { unit: 'Soldier', level: 6, hp: 171, spoils: 'Healing Leaf' }, { unit: 'Soldier', level: 6, hp: 170, spoils: 'Cup of Life' }, { unit: 'Soldier', level: 6, hp: 165, spoils: 'Sword Emblem' }, { unit: 'Archer', level: 6, hp: 148, spoils: 'Stone of Swiftness' }, { unit: 'Archer', level: 6, hp: 139, spoils: 'Crown of Intellect' }, { unit: 'Cleric', level: 6, hp: 134, spoils: 'Cleanse (S)' }, { unit: 'Wizard', level: 6, hp: 129, spoils: 'Crag Crush (S)' } ], strategy: [ "The castle wall provides a great tactical advantage. Knocking enemies off the wall with a shield bash can be an effective way to eliminate them.", "The Wizard and Cleric drop the Crag Crush and Cleanse spells, which are not yet available in shops. Defeat them to obtain these valuable spells.", "The enemy cleric tends to prioritize healing the leader. Use this to your advantage by luring her away from other enemies.", "A Dragon Gem Sword is buried at tile [12,12]." ], aftermath: `After some story scenes, you'll be employed by Cybil Alinda. The path to Ardea is now open.<ul class="list-disc list-inside space-y-3 pl-2 mt-4"><li>The Numida Chronology, obtained from this battle, unlocks Quest Mode.</li><li>Shops are updated with new items and area-effect spells.</li></ul>` },
+        // Battle 5
+        { id: 'wk05', chapter: 'Chapter 1', name: 'Ardea', difficulty: '3/10', mapSize: '18x14', winCondition: 'Defeat all enemies', deployment: { player: 'Up to 6', guest: '1', enemy: '7' }, enemies: [ { unit: 'Griffin', level: 7, hp: 178, spoils: 'Cup of Life' }, { unit: 'Griffin', level: 7, hp: 177, spoils: 'Savage Bugle' }, { unit: 'Hawkman', level: 7, hp: 166, spoils: 'Sorceror\'s Cup' }, { unit: 'Hawkman', level: 7, hp: 161, spoils: 'Sword Emblem' }, { unit: 'Hawkman', level: 7, hp: 156, spoils: 'Crown of Intellect' }, { unit: 'Fairy', level: 7, hp: 122, spoils: 'Stone of Swiftness' }, { unit: 'Fairy', level: 7, hp: 117, spoils: 'Healing Leaf' } ], guests: [{name: 'Cybil', level: 6, hp: 155}], strategy: [ "This is a swamp map, which will impede the movement of most ground units. Flying units like Hawkmen and Ninjas are very effective here.", "The enemies are all flying types, making them difficult to surround. Spells with 100% accuracy like Thunder Blade and Ice Field are recommended.", "Cybil is very powerful and can defeat enemies quickly. Try to get your own units involved to gain experience.", "One Hawkman drops a Sorcerer's Cup, which permanently increases max MP. Prioritize obtaining this item." ], aftermath: "Proceed to Urodela. If you have recruited Deneb, the secret shop in Scabellum will now be permanently open." },
+        // Battle 6
+        { id: 'wk06', chapter: 'Chapter 1', name: 'Urodela', difficulty: '3/10', mapSize: '13x11', winCondition: 'Defeat the leader (Ninja)', deployment: { player: 'Up to 6', guest: '1', enemy: '7' }, enemies: [ { unit: 'Ninja [L]', level: 9, hp: 163, spoils: 'Katzbalger', isLeader: true }, { unit: 'Ninja', level: 7, hp: 154, spoils: 'Sword Emblem' }, { unit: 'Ninja', level: 7, hp: 151, spoils: 'Cup of Life' }, { unit: 'Ninja', level: 7, hp: 151, spoils: 'Necklace of Resist' }, { unit: 'Ninja', level: 7, hp: 149, spoils: 'Altar of Resurrection' }, { unit: 'Ninja', level: 7, hp: 147, spoils: 'Healing Seed' }, { unit: 'Witch', level: 7, hp: 140, spoils: 'Magic Seed' } ], guests: [{name: 'Cybil', level: 7, hp: 159}], strategy: [ "Ninjas have high agility and movement. Use status effects like Sleep or Paralysis to control them.", "The enemy Witch can inflict Charm and Sleep. She is a high-priority target. She also carries a Spell Robe, which you can get by persuading her.", "One ninja has a Necklace of Resist, which nullifies all magic damage. This is an excellent accessory for non-magic units.", "A Hyacinth Fan is buried at tile [3,13]." ], aftermath: `This is a major story branch.<br>Choose <strong>"I've no better ideas..."</strong> for Path A (Bison).<br>Choose <strong>"It doesn't seem right."</strong> for Path B (Sufrir).` },
+        // Battle 7A
+        { id: 'wk7a', chapter: 'Chapter 1 (Path A)', name: 'Bison', difficulty: '3.5/10', mapSize: '13x19', winCondition: 'Defeat all enemies', deployment: { player: 'Up to 6', guest: '0', enemy: '7' }, enemies: [ { unit: 'Fairy', level: 10, hp: 128, spoils: 'Sword Emblem' }, { unit: 'Fairy', level: 10, hp: 127, spoils: 'Crown of Intellect' }, { unit: 'Hawkman', level: 10, hp: 181, spoils: 'Healing Seed' }, { unit: 'Hawkman', level: 10, hp: 197, spoils: 'Tower Shield' }, { unit: 'Hawkman', level: 10, hp: 189, spoils: 'Antidote' }, { unit: 'Blue Dragon', level: 10, hp: 218, spoils: 'Coral Harp' }, { unit: 'Blue Dragon', level: 10, hp: 217, spoils: 'Dragon Eyes' } ], strategy: [ "The swampy terrain will slow down most of your units. Flying and floating units have a major advantage.", "It is a good strategy to remain near your starting position, forcing the enemies to engage you on dry land.", "Avoid fighting in the water, as it incurs attack and defense penalties." ], aftermath: `Shiven, a ninja, will ask to join your party. Accepting his offer gets you the rare Kagari-bi katana. Equip the Dragon Eyes accessory on a key unit like a healer.` },
+        // Battle 7B
+        { id: 'wk7b', chapter: 'Chapter 1 (Path B)', name: 'Sufrir', difficulty: '4/10', mapSize: '11x18', winCondition: 'Defeat all enemies', deployment: { player: 'Up to 6', guest: '1', enemy: '7' }, enemies: [ { unit: 'Earth Dragon', level: 11, hp: 207, spoils: 'Crown of Intellect' }, { unit: 'Earth Dragon', level: 11, hp: 214, spoils: 'Mirror of the Gods' }, { unit: 'Thunder Dragon', level: 11, hp: 220, spoils: 'Cup of Life' }, { unit: 'Thunder Dragon', level: 11, hp: 225, spoils: 'Sword Emblem' }, { unit: 'Gremlin', level: 11, hp: 151, spoils: 'Sorceror\'s Cup' }, { unit: 'Gremlin', level: 11, hp: 153, spoils: 'Stone of Swiftness' }, { unit: 'Gremlin', level: 11, hp: 151, spoils: 'Stone of Swiftness' } ], guests: [{name: 'Orson', level: 8, hp: 153}], strategy: [ "Before the battle, your conversation with Eleanor can affect a future item reward. Choose \"Of course I'll be back.\" for the best outcome.", "Dragons are powerful. Use magic and ranged attacks to weaken them before engaging in close combat.", "Gremlins have high evasion. Use 100%-hit-rate magic or flying units to deal with them.", "Orson is not a special guest; if he is defeated and not revived, he is lost permanently.", "An Ice Wand is buried at the clifftop tile [11,16]." ], aftermath: `You can choose to have Orson permanently join your party. He may be weaker than your other units. Shops have been updated with new items. Glycinia can be encountered at Sufrir.` },
+        // Battle 8
+        { id: 'wk08', chapter: 'Chapter 1', name: 'Arena', difficulty: '3/10', mapSize: '14x12', winCondition: 'Varies', deployment: { player: 'Up to 6' }, enemies: [ /* Path-dependent */ ], guests: [ /* Path-dependent */ ], strategy: [ "This battle is different depending on your story path. On Path A, you must protect the mermaid Minerva. On Path B, you must defeat all enemies.", "Bringing a unit with the Clear Sky spell can be advantageous, especially on Path B, to remove water tiles.", "On Path A, fortifying your position on the starting island is a good strategy. On Path B, it's more of a defensive measure.", "Prioritize defeating the enemy mermaids on Path B, as their Lullaby skill can be very disruptive." ], aftermath: "No significant aftermath. Proceed to the next battle." },
+        // Battle 9
+        { id: 'wk09', chapter: 'Chapter 1', name: 'Rana', difficulty: '4.5/10', mapSize: '20x16', winCondition: 'Defeat the leader (Mermaid)', deployment: { player: 'Up to 6' }, enemies: [ { unit: 'Mermaid [L]', level: 15, hp: 208, spoils: '2000 Goth', isLeader: true }, { unit: 'Octopus', level: 13, hp: 237, spoils: 'Cup of Life' }, { unit: 'Octopus', level: 13, hp: 233, spoils: 'Healing Seed' }, { unit: 'Fairy', level: 13, hp: 134, spoils: 'Stone of Swiftness' }, { unit: 'Fairy', level: 13, hp: 142, spoils: 'Cassowary Feather' }, { unit: 'Mermaid', level: 13, hp: 192, spoils: 'Sword Emblem' }, { unit: 'Mermaid', level: 13, hp: 178, spoils: 'Sorceror\'s Cup' }, { unit: 'Mermaid', level: 13, hp: 191, spoils: 'Crown of Intellect' } ], strategy: [ "This map has a lot of water. Use Clear Sky to manage the weather and flooding.", "Waiting on the starting island to lure enemies onto dry land is a sound strategy.", "Ninjas and Hawkmen are very useful for navigating the terrain.", "An Ice Blade is buried at tile [16,01]. This is a very powerful one-handed sword." ], aftermath: `You can have the enemy leader, Aerial, join your party. She has some useful equipment even if you don't plan to use her in battle.` },
+        // Battle 10
+        { id: 'wk10', chapter: 'Chapter 1', name: 'Solea', difficulty: '4.5/10', mapSize: '21x12', winCondition: 'Protect Eleanor', deployment: { player: 'Up to 6', guest: '1' }, enemies: [ { unit: 'Dragoon [L]', level: 15, hp: 239, spoils: 'Fafnir', isLeader: true }, { unit: 'Fire Dragon', level: 13, hp: 235, spoils: 'Cup of Life' }, { unit: 'Blue Dragon', level: 13, hp: 232, spoils: 'Dragon Eyes' }, { unit: 'Earth Dragon', level: 13, hp: 240, spoils: 'Altar of Resurrection' }, { unit: 'Thunder Dragon', level: 13, hp: 240, spoils: 'Sword Emblem' }, { unit: 'Archer', level: 13, hp: 170, spoils: 'Stone of Swiftness' }, { unit: 'Archer', level: 13, hp: 178, spoils: 'Sherwood Hat' } ], guests: [{name: 'Eleanor', level: 12, hp: 213}], strategy: [ "Your starting position on the high ground provides a significant advantage. Use mages and ranged units to attack from safety.", "The enemy Dragoon can inflict instant death on dragons. Keep any allied dragons away from him.", "The Sherwood Hat dropped by an archer is a unique item. The Dragon Eyes accessory is also very valuable.", "The primary objective is to protect Eleanor. If her HP reaches zero, you lose the battle. Keep a healer nearby to support her." ], aftermath: `You can have Eleanor join you as a non-playable companion. Agreeing will lead to a better item reward later. Shops are updated with new equipment and powerful spells like Haste and Heal Plus.` },
+    ];
+
+    const contentDiv = document.getElementById('walkthrough-content');
+    const battleIndexSelect = document.getElementById('battle-index');
+
+    function populateIndex() {
+        battles.forEach((battle) => {
+            const option = document.createElement('option');
+            option.value = battle.id;
+            // Use the battle's 'id' for the display text to match the user's index
+            option.textContent = `${battle.id}: ${battle.name}`;
+            battleIndexSelect.appendChild(option);
+        });
+    }
+
+    function renderBattle(battleId) {
+        const battleIndex = battles.findIndex(b => b.id === battleId);
+        if (battleIndex === -1) {
+            contentDiv.innerHTML = `<p class="text-center text-red-500">Battle not found.</p>`;
+            return;
+        }
+
+        const battle = battles[battleIndex];
+        battleIndexSelect.value = battle.id;
+
+        const enemiesHtml = battle.enemies.map(e => `<tr class="${e.isLeader ? 'font-bold text-red-400' : ''}"><td class="px-4 py-2">${e.unit}</td><td class="px-4 py-2">${e.level}</td><td class="px-4 py-2">${e.hp}</td><td class="px-4 py-2">${e.spoils}</td></tr>`).join('');
+        const guestsHtml = battle.guests ? battle.guests.map(g => `<tr><td class="px-4 py-2">${g.name}</td><td class="px-4 py-2">${g.level}</td><td class="px-4 py-2">${g.hp}</td></tr>`).join('') : '';
+        const strategyHtml = battle.strategy.map(s => `<li>${s}</li>`).join('');
+
+        const prevBattle = battles[battleIndex - 1];
+        const nextBattle = battles[battleIndex + 1];
+
+        // Handle path split for navigation
+        let prevLink, nextLink;
+        if (battle.id === 'wk7a' || battle.id === 'wk7b') {
+             prevLink = `<a href="#wk06" class="nav-link inline-block battle-nav">&larr; Urodela</a>`;
+             nextLink = `<a href="#wk08" class="nav-link inline-block battle-nav">Arena &rarr;</a>`;
+        } else {
+             prevLink = prevBattle ? `<a href="#${prevBattle.id}" class="nav-link inline-block battle-nav">&larr; ${prevBattle.name}</a>` : `<span class="nav-link disabled">&larr; Previous</span>`;
+             nextLink = nextBattle ? `<a href="#${nextBattle.id}" class="nav-link inline-block battle-nav">${nextBattle.name} &rarr;</a>` : `<span class="nav-link disabled">Next &rarr;</span>`;
+        }
+       
+        contentDiv.innerHTML = `
+            <header class="text-center mb-8"><p class="text-yellow-400 font-medieval text-xl">Walkthrough: ${battle.chapter}</p><h1 class="font-medieval font-bold text-5xl text-yellow-300">${battle.name}</h1></header>
+            <div class="content-container p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Battle Info</h2><ul class="space-y-2"><li><strong>Difficulty:</strong> ${battle.difficulty}</li><li><strong>Map Size:</strong> ${battle.mapSize}</li><li><strong>Winning Condition:</strong> ${battle.winCondition}</li></ul></div>
+                    <div><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Deployment</h2><ul class="space-y-2"><li><strong>Player Units:</strong> ${battle.deployment.player}</li>${battle.deployment.guest ? `<li><strong>Guest Units:</strong> ${battle.deployment.guest}</li>` : ''}<li><strong>Enemy Units:</strong> ${battle.deployment.enemy || battle.enemies.length}</li></ul></div>
+                </div>
+                <div class="mb-8"><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Enemy Forces</h2><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm text-left"><thead class="uppercase"><tr><th class="px-4 py-2">Unit</th><th class="px-4 py-2">Level</th><th class="px-4 py-2">HP</th><th class="px-4 py-2">Spoils</th></tr></thead><tbody class="divide-y divide-gray-700">${enemiesHtml}</tbody></table></div></div>
+                ${guestsHtml ? `<div class="mb-8"><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Guest Units</h2><div class="overflow-x-auto rounded-lg border border-gray-700"><table class="w-full text-sm text-left"><thead class="uppercase"><tr><th class="px-4 py-2">Name</th><th class="px-4 py-2">Level</th><th class="px-4 py-2">HP</th></tr></thead><tbody class="divide-y divide-gray-700">${guestsHtml}</tbody></table></div></div>` : ''}
+                <div><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Strategy</h2><div class="space-y-4 text-gray-300"><ul class="list-disc list-inside space-y-3 pl-2">${strategyHtml}</ul></div></div>
+                ${battle.aftermath ? `<div class="mt-8"><h2 class="font-medieval text-2xl text-yellow-400 mb-3">Aftermath</h2><div class="space-y-4 text-gray-300">${battle.aftermath}</div></div>` : ''}
+            </div>
+            <footer class="text-center mt-8 text-gray-400 flex justify-between items-center">${prevLink}${nextLink}</footer>`;
+    }
+
+    function handleNavigation() {
+        const battleId = window.location.hash.substring(1) || battles[0].id;
+        const battleExists = battles.some(b => b.id === battleId);
+        if (battleExists) {
+            renderBattle(battleId);
+        } else {
+            renderBattle(battles[0].id);
+        }
+        window.scrollTo(0, 0);
+    }
+
+    battleIndexSelect.addEventListener('change', function() {
+        window.location.hash = this.value;
+    });
+
+    // Handle initial page load and all navigation
+    window.addEventListener('hashchange', handleNavigation);
+    
+    // Initial setup
+    populateIndex();
+    handleNavigation();
+
+    </script>
+</body>
+</html>
