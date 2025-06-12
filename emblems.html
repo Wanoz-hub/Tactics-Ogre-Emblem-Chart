@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactics Ogre: Emblem Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background to match */
+            color: #E5E7EB; /* Light gray text for readability */
+        }
+        .font-medieval {
+            font-family: 'MedievalSharp', cursive;
+        }
+        .table-container, .filter-container {
+            background-color: rgba(31, 41, 55, 0.8); /* Semi-transparent dark gray */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #4B5563; /* gray-600 */
+            backdrop-filter: blur(4px);
+        }
+        thead th {
+            font-family: 'MedievalSharp', cursive;
+            background-color: #374151; /* gray-700 */
+            color: #FBBF24; /* amber-400 */
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+        tbody tr {
+            color: #D1D5DB; /* gray-300 */
+        }
+        tbody tr:nth-child(even) {
+            background-color: rgba(55, 65, 81, 0.5); /* gray-700 semi-transparent */
+        }
+        tbody tr:hover {
+            background-color: rgba(75, 85, 99, 0.7); /* gray-600 semi-transparent */
+        }
+        .emblem-name {
+            font-family: 'MedievalSharp', cursive;
+            color: #FBBF24; /* amber-400 */
+            font-weight: normal;
+            font-size: 1.1rem;
+            line-height: 1.2;
+        }
+        .missable-tag {
+            background-color: #B91C1C; /* red-700 */
+            color: #ffffff;
+        }
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            color: #FBBF24; /* amber-400 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-size: 2.5rem;
+            line-height: 1.4;
+        }
+        .filter-label, .text-gray-400 {
+            color: #D1D5DB; /* gray-300 */
+        }
+        .text-gray-500 {
+           color: #9CA3AF; /* gray-400 */
+        }
+        .border-gray-700 {
+            border-color: #4B5563; /* gray-600 */
+        }
+        input[type="text"], input[type="search"] {
+            background-color: #374151; /* gray-700 */
+            border-color: #4B5563; /* gray-600 */
+            color: #F9FAFB; /* gray-50 */
+        }
+        input[type="text"]:focus, input[type="search"]:focus {
+            --tw-ring-color: #FBBF24; /* amber-400 */
+        }
+        input[type="checkbox"] {
+            accent-color: #FBBF24; /* amber-400 */
+        }
+        .back-link {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background-color: rgba(55, 65, 81, 0.8);
+            color: #FBBF24;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid #4B5563;
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            background-color: #FBBF24;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <a href="index.html" class="back-link">&larr; Back to Main</a>
+    <div class="max-w-7xl mx-auto pt-16">
+        <header class="text-center mb-8">
+            <h1 class="font-bold">Emblem Overview</h1>
+            <p class="text-lg text-gray-400 mt-2">An interactive and filterable guide to all emblems.</p>
+        </header>
+
+        <!-- Filter Controls -->
+        <div class="filter-container p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-2">
+                    <label for="search-input" class="block mb-2 text-sm font-medium filter-label">Search</label>
+                    <input type="search" id="search-input" placeholder="e.g., Animal Hunter, +10 AGI..." class="w-full px-4 py-2 rounded-md border focus:outline-none focus:ring-2">
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium filter-label">Filter by Mode</label>
+                    <div id="mode-filters" class="flex flex-wrap gap-x-4 gap-y-2"></div>
+                </div>
+                 <div>
+                    <label class="block mb-2 text-sm font-medium filter-label">Other Filters</label>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="missable-filter" class="w-4 h-4 rounded">
+                        <label for="missable-filter" class="ml-2 text-sm filter-label">Show Only Missable</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emblems Table -->
+        <div class="table-container overflow-x-auto">
+            <div class="max-h-[70vh] overflow-y-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="uppercase">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Emblem</th>
+                            <th scope="col" class="px-6 py-3">Image</th>
+                            <th scope="col" class="px-6 py-3">Effect</th>
+                            <th scope="col" class="px-6 py-3">How to Obtain</th>
+                            <th scope="col" class="px-6 py-3">Modes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emblems-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+         <footer class="text-center mt-8 text-gray-500 text-sm">
+            <p>Data based on the Tactics Ogre: The Knight of Lodis guide.</p>
+        </footer>
+    </div>
+
+    <script>
+        const emblemsData=[{name:"Blood Reign",description:"Awarded for killing 25 foes. It terrifies enemies within 3 panels of the owner.",effect:"Enemies within 3 panels receive -1 to Mental Gauge.",obtain:"Defeat 25 total enemies with one character.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/1.png"},{name:"Dragon's Scale",description:"Honors one who slays at least 5 dragons. Required to change into a Dragoon, but the trust of dragons will be lost.",effect:"Unlocks Dragoon class; -50% persuasion penalty on dragons.",obtain:"Defeat 5 dragon-type units.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/2.png"},{name:"Animal Hunter",description:"Honors one who slays at least 5 ferocious beasts. Trust from beasts will be lost.",effect:"Persuading beasts has a 50% success penalty.",obtain:"Defeat 5 beast-type units.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/3.png"},{name:"Exorcist",description:"Commends one who vanquished 5 undead beings. It terrifies undead within three panels of the owner.",effect:"Undead enemies within 3 panels receive -1 to Mental Gauge.",obtain:"Exorcise 5 undead units.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/4.png"},{name:"Self Preservation",description:"Awarded for using a counterattack to finish off a foe. Increases counterattack ability.",effect:"Increases damage dealt with counterattacks.",obtain:"Defeat an enemy with a counterattack.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/5.png"},{name:"Berserk",description:"Awarded in praise of ability to kill with one strike. Affects changes in luck.",effect:"Lengthens the character's biorhythm period.",obtain:"Defeat an enemy at full health in a single hit.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/6.png"},{name:"Arbitration",description:"Awarded for persuading enemies to have a change of heart, without resorting to fighting. Increases persuasiveness.",effect:"Increases persuasion success rate by 30%.",obtain:"Successfully persuade 5 units.",modes:["Story"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/7.png"},{name:"Broken Heart",description:"Sympathetic (and pathetic) emblem presented to males who fail to persuade female foes. Decreases luck (even further)!",effect:"Shortens the character's biorhythm period.",obtain:"As a male character, fail to persuade a female unit 10 times.",modes:["Story"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/8.png"},{name:"Vixen's Whisper",description:"Awarded for using feminine persuasions to befriend enemies. Required to become a Witch.",effect:"Unlocks the Witch class.",obtain:"As a female character, successfully persuade a male unit.",modes:["Story"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/9.png"},{name:"Sniper",description:"Awarded for accuracy in missile attacks. Increases agility.",effect:"+10 AGI",obtain:"Land 5 consecutive hits with a bow or crossbow.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/10.png"},{name:"Fist Fight",description:"Awarded to heroes who defeat enemies with their bare fists and no equipment. Their fists become even more lethal.",effect:"Increases damage dealt with bare-handed attacks.",obtain:"Defeat an enemy with a bare-handed attack while unequipped.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/11.png"},{name:"Heavenly Spirit",description:"Awarded for healing comrades on the battlefield. Required to become a Priest.",effect:"Unlocks the Priest class.",obtain:"Use healing magic on allies 20 times.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/12.png"},{name:"Don Quixote",description:"Warning for those who rush into battle hastily, suffering a brutal counterattack.",effect:"-10 INT",obtain:"Receive counterattack damage equal to 75% or more of max HP.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/13.png"},{name:"Centurion",description:"A tribute to one who defeats all enemies on the battlefield. Increases power.",effect:"+20 STR",obtain:"Have a single character defeat or persuade all enemies on a map.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/14.png"},{name:"Charisma",description:"Honors extraordinary heroes with remarkable strength, intelligence, or agility.",effect:"Allies within 3 panels receive +1 to Mental Gauge.",obtain:"Reach 350+ in STR, INT, or AGI.",modes:["Story","Training"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/15.png"},{name:"Bullpen Ace",description:"Given to those 'belly-itchers' who couldn't 'hit the broad side of a barn' in battle, despite their MVP status in training.",effect:"Increases damage dealt by 125% in Training mode only.",obtain:"In Training mode, defeat 20 units.",modes:["Training"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/16.png"},{name:"Bogus Hero",description:"All the training in the world won't amount to much if you choke on stage! This emblem's penalty can be negated by the emblem Miracle.",effect:"Prevents the character from landing critical hits.",obtain:"Gain 20 levels exclusively in Training mode.",modes:["Training"],missable:!0,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/17.png"},{name:"The Pen and the Sword",description:"Awarded for experience in hand to hand combat as well as the use of destructive magic. Required to become a Warlock.",effect:"Unlocks the Warlock class.",obtain:"Defeat 4 enemies with physical attacks and 4 with magic/skills.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/18.png"},{name:"Gibe of the Fallen Angel",description:"Dishonorable emblem for clergy members who slay numerous living beings despite their sworn duty.",effect:"Shifts alignment one step towards Chaotic.",obtain:"As a Cleric or Priest, defeat 3 enemies with physical attacks.",modes:["Story","Quest","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/19.png"},{name:"Lancer",description:"Awarded for striking 2 enemies with one piercing attack. Required to become a Valkyrie.",effect:"Unlocks the Valkyrie class.",obtain:"Hit 2 units simultaneously with a spear or whip.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/20.png"},{name:"Philosopher's Stone",description:"Presented to spellcasters who effectively use area-effect spells to defeat many foes.",effect:"Unlocks the Siren class.",obtain:"Defeat 2+ enemies simultaneously with one area-of-effect spell.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/21.png"},{name:"War God",description:"Honors those who deal ferocious blows to their foes. Increases strength at the expense of intelligence.",effect:"+30 STR, -30 INT",obtain:"Inflict 200+ damage with a single physical attack.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/22.png"},{name:"Knight's Certificate",description:"Awarded to courageous warriors who attack head on. Required to become a knight.",effect:"Unlocks the Knight class.",obtain:"Attack enemies from the front or sides at close range 15 times.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/23.png"},{name:"Book of Initiation",description:"Awarded for skill in dodging enemies' attacks. Required to become a Swordmaster.",effect:"Unlocks the Swordmaster class.",obtain:"Dodge or block 3 consecutive physical attacks.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/24.png"},{name:"Miracle",description:"Praises the miraculous dodging of an attack when nearing death. One miracle leads to another.",effect:"Increases critical hit rate; nullifies Bogus Hero.",obtain:"Dodge or block an attack with 5% or less HP remaining.",modes:["Story","Quest","Training","Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/25.png"},{name:"Embodiment of Desires",description:"Recognizes expert treasure-hunting ability.",effect:"Increases the rank of buried treasure found.",obtain:"Collect 5 buried treasures or loot bags.",modes:["Story","Training"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/26.png"},{name:"Archangel's Feather",description:"Presented by Archangel when dead are revived. Required to become an Angel Knight.",effect:"Unlocks the Angel Knight class.",obtain:"Revive a unit after it has been knocked out.",modes:["Story","Training"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/27.png"},{name:"The Cycle of Life",description:"Designates character that has transmigrated to undead by Necromancy and is returned to original form by Reincarnation. Supports undead within three panels.",effect:"Undead allies within 3 panels receive +1 to Mental Gauge.",obtain:"Turn a unit undead via Necromancy, then return it to life with Reincarnation.",modes:["Story","Training"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/28.png"},{name:"Mark of the Elite",description:"Praises those who fulfill the Winning Conditions with only a few characters.",effect:"Grants an immediate level up (if not max level).",obtain:"Win a battle with 2 or fewer characters in the party.",modes:["Story"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/29.png"},{name:"Lucky Soldier",description:"Awarded for returning from a battle in VS Mode unscathed. Increases luck.",effect:"Increases the character's biorhythm value.",obtain:"Win a Vs. Mode battle without taking any damage.",modes:["Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/30.png"},{name:"Mark of Valor",description:"Honors heroes who fulfill the winning condition in Vs. Mode. Stabilizes luck.",effect:"Decreases the character's biorhythm amplitude.",obtain:"Win a battle in Vs. Mode.",modes:["Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/31.png"},{name:"Veteran Soldier",description:"Awarded to all characters in a victorious battle in Vs. Mode. Increases the basic stats.",effect:"+15 STR, +15 INT, +15 AGI",obtain:"Defeat an enemy in Vs. Mode.",modes:["Vs. Mode"],missable:!1,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/32.png"},{name:"Relix's Emblem",description:"Prestigious emblem for men who use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.",effect:"Mental Gauge is permanently set to +2.",obtain:"Master all 14 male classes with one character.",modes:["Story","Training"],missable:!0,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/33.png"},{name:"Ripple's Emblem",description:"A tribute to women who use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.",effect:"Mental Gauge is permanently set to +2.",obtain:"Master all 14 female classes with one character.",modes:["Story","Training"],missable:!0,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/34.png"},{name:"Grozz Nuy's Emblem",description:"Emblem bestowed upon dragons that use their talents effectively and gain experience in all classes. Removes fear and fosters success in battle.",effect:"Mental Gauge is permanently set to +2.",obtain:"Master all 8 dragon classes with a single dragon.",modes:["Story","Training"],missable:!0,imageUrl:"https://raw.githubusercontent.com/Wanoz-hub/Tactics-Ogre-Emblem-Chart/main/Images/35.png"}];
+        const tableBody = document.getElementById('emblems-table-body');
+        const searchInput = document.getElementById('search-input');
+        const modeFiltersContainer = document.getElementById('mode-filters');
+        const missableFilter = document.getElementById('missable-filter');
+        const allModes = [...new Set(emblemsData.flatMap(e => e.modes))].sort();
+        allModes.forEach(mode => { const div = document.createElement('div'); div.className = 'flex items-center'; div.innerHTML = ` <input type="checkbox" id="mode-${mode.toLowerCase().replace(' ', '-')}" value="${mode}" class="w-4 h-4 rounded mode-checkbox"> <label for="mode-${mode.toLowerCase().replace(' ', '-')}" class="ml-2 text-sm filter-label">${mode}</label> `; modeFiltersContainer.appendChild(div); });
+        const modeCheckboxes = document.querySelectorAll('.mode-checkbox');
+        const renderTable = (data) => {
+            tableBody.innerHTML = '';
+            if (data.length === 0) { tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 px-6">No emblems found matching your criteria.</td></tr>`; return; }
+            data.forEach((emblem) => {
+                const originalIndex = emblemsData.findIndex(original => original.name === emblem.name);
+                const missableTag = emblem.missable ? '<span class="missable-tag font-sans bg-red-700 text-white text-xs px-2 py-1 rounded-full font-medium ml-3">Missable</span>' : '';
+                const row = `<tr class="border-b border-gray-700 align-middle"><td class="px-6 py-4"><div class="flex items-center"><span class="emblem-name">${originalIndex + 1}. ${emblem.name}</span>${missableTag}</div><p class="font-normal mt-2 text-gray-400">${emblem.description}</p></td><td class="px-6 py-4 text-center"><img src="${emblem.imageUrl}" alt="Image for ${emblem.name}" class="w-16 h-16 object-contain inline-block" onerror="this.onerror=null;this.src='https://placehold.co/64x64/374151/FBBF24?text=N/A';"></td><td class="px-6 py-4">${emblem.effect}</td><td class="px-6 py-4">${emblem.obtain}</td><td class="px-6 py-4">${emblem.modes.join(', ')}</td></tr>`;
+                tableBody.innerHTML += row;
+            });
+        };
+        const filterData = () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedModes = [...modeCheckboxes].filter(cb => cb.checked).map(cb => cb.value);
+            const showOnlyMissable = missableFilter.checked;
+            let filteredData = emblemsData;
+            if (searchTerm) { filteredData = filteredData.filter(emblem => emblem.name.toLowerCase().includes(searchTerm) || emblem.description.toLowerCase().includes(searchTerm) || emblem.effect.toLowerCase().includes(searchTerm) || emblem.obtain.toLowerCase().includes(searchTerm)); }
+            if (selectedModes.length > 0) { filteredData = filteredData.filter(emblem => selectedModes.every(mode => emblem.modes.includes(mode))); }
+            if (showOnlyMissable) { filteredData = filteredData.filter(emblem => emblem.missable); }
+            renderTable(filteredData);
+        };
+        searchInput.addEventListener('input', filterData);
+        missableFilter.addEventListener('change', filterData);
+        modeCheckboxes.forEach(checkbox => checkbox.addEventListener('change', filterData));
+        renderTable(emblemsData);
+    </script>
+</body>
+</html>
