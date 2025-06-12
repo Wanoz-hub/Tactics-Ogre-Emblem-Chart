@@ -31,10 +31,7 @@
         tbody tr:nth-child(even) {
             background-color: rgba(55, 65, 81, 0.5);
         }
-        .back-link {
-            position: absolute;
-            top: 1.5rem;
-            left: 1.5rem;
+        .nav-link {
             background-color: rgba(55, 65, 81, 0.8);
             color: #FBBF24;
             padding: 0.5rem 1rem;
@@ -44,7 +41,7 @@
             border: 1px solid #4B5563;
             transition: all 0.2s;
         }
-        .back-link:hover {
+        .nav-link:hover {
             background-color: #FBBF24;
             color: #111827;
         }
@@ -52,7 +49,9 @@
 </head>
 <body class="p-4 md:p-8">
 
-    <a href="index.html" class="back-link">&larr; Back to Main Hub</a>
+    <div class="fixed top-0 left-0 p-4 md:p-6 z-10">
+        <a href="index.html" class="nav-link">&larr; Back to Main Hub</a>
+    </div>
 
     <div class="max-w-4xl mx-auto pt-16">
         <header class="text-center mb-8">
@@ -159,10 +158,13 @@
             </div>
         </div>
 
-        <footer class="text-center mt-8 text-gray-500 text-sm">
-            <p>After the battle, a cutscene will play, and Ivanna will join your party.</p>
+        <footer class="text-center mt-8 text-gray-400">
+            <p class="mb-4">After the battle, a cutscene will play, and Ivanna will join your party.</p>
+            <a href="walkthrough_scabellum.html" class="nav-link inline-block">Next Battle: Scabellum &rarr;</a>
         </footer>
     </div>
 
 </body>
+</html>
+
 </html>
