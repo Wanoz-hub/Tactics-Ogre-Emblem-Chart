@@ -55,6 +55,32 @@
             background-color: #FBBF24;
             color: #111827;
         }
+        .best-odds-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: rgba(251, 191, 36, 0.1);
+            color: #FBBF24;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid #FBBF24;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            line-height: 1.1;
+             backdrop-filter: blur(4px);
+        }
+        .best-odds-btn:hover {
+            background-color: #FBBF24;
+            color: #111827;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
@@ -64,7 +90,8 @@
     <div id="app-container" class="w-full max-w-4xl mx-auto">
 
         <!-- Start Screen -->
-        <div id="start-screen" class="text-center fade-in">
+        <div id="start-screen" class="relative text-center fade-in">
+             <button id="best-odds-btn" class="best-odds-btn">Best<br>Odds</button>
             <h1 class="font-medieval text-4xl md:text-6xl text-yellow-300 font-bold mb-4 tracking-wider">The Tarot of Destiny</h1>
             <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">Your journey is about to begin. Answer the questions of the tarot to shape the path that lies before you.</p>
             <button id="start-btn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-xl shadow-lg shadow-yellow-400/20 transition-all duration-300 transform hover:scale-105">
@@ -85,7 +112,7 @@
 
         <!-- Results Screen -->
         <div id="results-screen" class="hidden text-center bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl fade-in max-w-3xl mx-auto">
-            <h1 class="font-medieval text-4xl text-yellow-300 font-bold mb-6 tracking-wider">Your Path is Chosen</h1>
+            <h1 id="results-title" class="font-medieval text-4xl text-yellow-300 font-bold mb-6 tracking-wider">Your Path is Chosen</h1>
             <div id="results-summary" class="space-y-4 text-left">
                 <!-- Results will be injected here -->
             </div>
@@ -114,19 +141,29 @@
             { range: [-6, -4], troops: ["Wizard [M]", "Cleric [F]", "Soldier [M]", "Soldier [F]"], items: ["Cure Leaf x 10", "Magic Leaf x 6", "Altar of Resurrection x 3"], stats: { MP: "+10", INT: "+10", AGI: "+04" } }
         ];
 
+        const bestBuild = {
+            choices: ["Sacrifice", "Longevity", "Strife / Wisdom / Hatred", "Revenge / Victory", "Terror", "Glory"],
+            results: { pts: 6, elements: ["Earth", "Fire", "Ice", "Wind (any order)"], alignments: ["Chaotic", "Lawful (any order)"], emblems: ["Fist Fight (and others)"] }
+        };
+
+        // --- STATE ---
         let currentQuestionIndex = 0;
         let userResults = { pts: 0, elements: [], alignments: [], emblems: [] };
 
+        // --- DOM ELEMENTS ---
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const resultsScreen = document.getElementById('results-screen');
         const startBtn = document.getElementById('start-btn');
+        const bestOddsBtn = document.getElementById('best-odds-btn');
         const restartBtn = document.getElementById('restart-btn');
+        const resultsTitle = document.getElementById('results-title');
         const progressText = document.getElementById('progress-text');
         const questionText = document.getElementById('question-text');
         const answersGrid = document.getElementById('answers-grid');
         const resultsSummary = document.getElementById('results-summary');
 
+        // --- FUNCTIONS ---
         function startQuiz() {
             currentQuestionIndex = 0;
             userResults = { pts: 0, elements: [], alignments: [], emblems: [] };
@@ -180,7 +217,7 @@
             setTimeout(() => {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.length) displayQuestion();
-                else showResults();
+                else showResults(false);
             }, 1500);
         }
         
@@ -188,24 +225,43 @@
             return rewardsByPoints.find(reward => points >= reward.range[0] && points <= reward.range[1]) || null;
         }
 
-        function showResults() {
+        function showResults(isBestBuild) {
+            startScreen.classList.add('hidden');
             quizScreen.classList.add('hidden');
             resultsScreen.classList.remove('hidden');
             resultsScreen.classList.add('fade-in');
 
-            const alignmentCounts = userResults.alignments.reduce((acc, val) => ({ ...acc, [val]: (acc[val] || 0) + 1 }), {});
-            const lawful = alignmentCounts.Lawful || 0;
-            const chaotic = alignmentCounts.Chaotic || 0;
-            const finalAlignment = lawful > chaotic ? "Lawful" : (chaotic > lawful ? "Chaotic" : "Neutral");
+            let finalAlignment, points, rewards, bestBuildChoicesHTML = '';
+            
+            if (isBestBuild) {
+                resultsTitle.textContent = "Best Odds Build";
+                points = bestBuild.results.pts;
+                finalAlignment = "Chaotic"; // As it has more +1 pt options
+                rewards = getRewardsByPoints(points);
+                bestBuildChoicesHTML = `
+                    <div class="mt-6 border-t border-yellow-400/30 pt-6">
+                        <h2 class="font-medieval text-2xl text-yellow-300 mb-4">How to Obtain</h2>
+                        <ul class="text-left list-disc list-inside text-gray-300 space-y-2">
+                            ${bestBuild.choices.map((choice, i) => `<li><strong>Q${i+1}:</strong> ${choice}</li>`).join('')}
+                        </ul>
+                    </div>`;
+            } else {
+                resultsTitle.textContent = "Your Path is Chosen";
+                points = userResults.pts;
+                const alignmentCounts = userResults.alignments.reduce((acc, val) => ({ ...acc, [val]: (acc[val] || 0) + 1 }), {});
+                const lawful = alignmentCounts.Lawful || 0;
+                const chaotic = alignmentCounts.Chaotic || 0;
+                finalAlignment = lawful > chaotic ? "Lawful" : (chaotic > lawful ? "Chaotic" : "Neutral");
+            }
 
-            const rewards = getRewardsByPoints(userResults.pts);
+            rewards = getRewardsByPoints(points);
             
             let rewardsHTML = '';
             if (rewards) {
                 rewardsHTML = `<div class="mt-6 border-t border-yellow-400/30 pt-6"><h2 class="font-medieval text-2xl text-yellow-300 mb-4">Your Starting Boon</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm"><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Troops</h3><ul class="text-white space-y-1">${rewards.troops.map(t => `<li>- ${t}</li>`).join('')}</ul></div><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Items</h3><ul class="text-white space-y-1">${rewards.items.map(i => `<li>- ${i}</li>`).join('')}</ul></div><div class="bg-gray-900/50 p-4 rounded-lg"><h3 class="font-bold text-lg text-yellow-400/80 mb-2">Stat Boosts</h3><div class="text-white space-y-1">${Object.entries(rewards.stats).map(([stat, value]) => `<div><span class="font-semibold">${stat}:</span> <span class="text-yellow-300">${value}</span></div>`).join('')}</div></div></div></div>`;
             }
 
-            resultsSummary.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Total Points:</p><p class="text-2xl font-bold text-yellow-300">${userResults.pts}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Final Alignment:</p><p class="text-2xl font-bold text-white">${finalAlignment}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Elemental Affinities:</p><p class="text-xl font-bold text-white">${userResults.elements.length > 0 ? userResults.elements.join(', ') : 'None'}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Emblems Earned:</p><p class="text-xl font-bold text-white">${userResults.emblems.length > 0 ? userResults.emblems.join(', ') : 'None'}</p></div></div>${rewardsHTML}`;
+            resultsSummary.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Total Points:</p><p class="text-2xl font-bold text-yellow-300">${points}</p></div><div class="bg-gray-900/50 p-4 rounded-lg"><p class="text-lg text-gray-400">Final Alignment:</p><p class="text-2xl font-bold text-white">${finalAlignment}</p></div><div class="bg-gray-900/50 p-4 rounded-lg col-span-1 md:col-span-2"><p class="text-lg text-gray-400">Summary:</p><p class="text-md text-white">This combination provides the highest possible starting STR and HP, giving you a powerful physical advantage from the beginning.</p></div></div>${rewardsHTML}${bestBuildChoicesHTML}`;
         }
         
         function restartQuiz() {
@@ -216,6 +272,7 @@
 
         startBtn.addEventListener('click', startQuiz);
         restartBtn.addEventListener('click', restartQuiz);
+        bestOddsBtn.addEventListener('click', () => showResults(true));
     </script>
 </body>
 </html>
