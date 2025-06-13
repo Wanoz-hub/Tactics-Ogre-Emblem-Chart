@@ -36,15 +36,27 @@
             border: 2px solid #ca8a04; /* yellow-600 */
             backdrop-filter: blur(8px);
         }
-        th {
-            background-color: rgba(55, 65, 81, 0.8);
+        /* Added for responsive iframe */
+        .iframe-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 75%; /* Aspect ratio 4:3 - adjust as needed */
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
     </style>
 </head>
 <body class="text-gray-200">
 
     <div class="container mx-auto p-4 md:p-8">
-        
+
         <header class="text-center mb-10">
             <h1 class="font-medieval text-5xl md:text-7xl text-yellow-300 font-bold mb-2 tracking-wider">Character Classes</h1>
             <p class="text-lg text-gray-400">A guide to all classes in The Knight of Lodis.</p>
@@ -55,186 +67,10 @@
 
         <main class="content-container rounded-2xl p-4 md:p-8 shadow-2xl">
 
-            <section class="mb-12">
-                <h2 class="font-medieval text-4xl text-yellow-400 mb-6 border-b-2 border-yellow-600 pb-2">Male Classes</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Class</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Requirements</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Benefits</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-600">
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Soldier</td>
-                                <td class="p-3 align-top">None</td>
-                                <td class="p-3 align-top">The basic starting class. Balanced stats and can use a variety of swords, armor, and shields.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Ninja</td>
-                                <td class="p-3 align-top">STR 36, AGI 37</td>
-                                <td class="p-3 align-top">High agility, can traverse water. Excels with katanas and has the "Shuriken" ranged ability.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Archer</td>
-                                <td class="p-3 align-top">AGI 37</td>
-                                <td class="p-3 align-top">Specialized ranged attackers who excel with bows, keeping them out of immediate danger.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Wizard</td>
-                                <td class="p-3 align-top">MP 16, INT 26, Alignment: N or C</td>
-                                <td class="p-3 align-top">Offensive magic-users with strong INT and MP growth. Cast powerful area-of-effect spells.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Cleric</td>
-                                <td class="p-3 align-top">MP 18, INT 28, Alignment: L or N</td>
-                                <td class="p-3 align-top">The primary healing class, essential for sustaining your army with healing and support spells.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Knight</td>
-                                <td class="p-3 align-top">STR 51, AGI 53, Alignment: L or N, Emblem: Knight's Certificate</td>
-                                <td class="p-3 align-top">Sturdy front-line fighters with good STR/DEF. Can use powerful gear and low-level healing magic.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Swordmaster</td>
-                                <td class="p-3 align-top">STR 95, AGI 111, Alignment: L or N, Emblem: Book of Initiation</td>
-                                <td class="p-3 align-top">Highly skilled swordsmen with exceptional agility. Adept with katanas and powerful special attacks.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Dragoon</td>
-                                <td class="p-3 align-top">HP 215, STR 109, AGI 94, Emblem: Dragon's Scale</td>
-                                <td class="p-3 align-top">Elite warriors specialized in slaying dragons and beasts. High HP and STR.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Warlock</td>
-                                <td class="p-3 align-top">MP 78, STR 90, INT 76, Alignment: N or C, Emblem: The Pen and the Sword</td>
-                                <td class="p-3 align-top">Hybrid class combining physical combat with powerful magic. Can equip swords and use offensive spells.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Beast Tamer</td>
-                                <td class="p-3 align-top">STR 34</td>
-                                <td class="p-3 align-top">Specialized in recruiting and commanding beasts. Gains a persuasion bonus against beasts and can use whips.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Priest</td>
-                                <td class="p-3 align-top">MP 76, INT 96, Alignment: L or N, Emblem: Heavenly Spirit</td>
-                                <td class="p-3 align-top">Advanced healing class with access to the most powerful restorative and support magic in the game.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            
-            <section class="mb-12">
-                <h2 class="font-medieval text-4xl text-yellow-400 mb-6 border-b-2 border-yellow-600 pb-2">Female Classes</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Class</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Requirements</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Benefits</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-600">
-                           <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Amazon</td>
-                                <td class="p-3 align-top">None</td>
-                                <td class="p-3 align-top">The basic starting class for female recruits with balanced stats.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Archer</td>
-                                <td class="p-3 align-top">AGI 37</td>
-                                <td class="p-3 align-top">Proficient with bows to provide excellent ranged support.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Valkyrie</td>
-                                <td class="p-3 align-top">STR 48, INT 41, Alignment: L or N, Emblem: Lancer</td>
-                                <td class="p-3 align-top">Versatile warriors proficient in both physical combat (spears) and offensive magic.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Wizard</td>
-                                <td class="p-3 align-top">MP 16, INT 26, Alignment: N or C</td>
-                                <td class="p-3 align-top">Female Wizards share the same role as males, wielding powerful offensive magic from the back lines.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Cleric</td>
-                                <td class="p-3 align-top">MP 18, INT 28, Alignment: L or N</td>
-                                <td class="p-3 align-top">Female Clerics are dedicated healers, crucial for keeping your army alive.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Siren</td>
-                                <td class="p-3 align-top">MP 60, INT 60, Emblem: Philosopher's Stone</td>
-                                <td class="p-3 align-top">Powerful offensive spellcasters who can use some of the most devastating magic, including summon spells.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Witch</td>
-                                <td class="p-3 align-top">MP 38, INT 35, Alignment: N or C, Emblem: Vixen's Whisper</td>
-                                <td class="p-3 align-top">Specialists in debilitating status-effect magic (charm, sleep, poison).</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Dragon Tamer</td>
-                                <td class="p-3 align-top">HP 140, MP 14, STR 35, AGI 42</td>
-                                <td class="p-3 align-top">Dedicated to recruiting and commanding dragons. Gains a persuasion bonus against them.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Priest</td>
-                                <td class="p-3 align-top">MP 76, INT 96, Alignment: L or N, Emblem: Heavenly Spirit</td>
-                                <td class="p-3 align-top">Advanced healing class with access to the most powerful restorative and support magic in the game.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <div class="iframe-container">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQovMy_AMxX9g6sYkeyAbLJpo-hJ-FVIG0o6za1Ch10qnArLrwP9TcDuo5UMbrJDRmAeO2nO98uGMsl/pubhtml?gid=427814775&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            </div>
 
-            <section>
-                <h2 class="font-medieval text-4xl text-yellow-400 mb-6 border-b-2 border-yellow-600 pb-2">Special & Demi-Human Classes</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Class</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">How to Acquire</th>
-                                <th class="p-3 font-bold uppercase text-gray-300 text-sm tracking-wider">Benefits</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-600">
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Hawkman</td>
-                                <td class="p-3 align-top">Recruited in battle.</td>
-                                <td class="p-3 align-top">Flying units with excellent mobility that can ignore terrain obstacles. Strong physical attackers.</td>
-                            </tr>
-                             <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Mermaid</td>
-                                <td class="p-3 align-top">Recruited in battle.</td>
-                                <td class="p-3 align-top">Aquatic units that excel in water, gaining increased movement and combat effectiveness.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Fairy</td>
-                                <td class="p-3 align-top">Recruited in battle.</td>
-                                <td class="p-3 align-top">Small, flying units. Low combat stats but can use support abilities and are difficult to hit.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Giant</td>
-                                <td class="p-3 align-top">Recruited in battle.</td>
-                                <td class="p-3 align-top">Large and powerful units with immense STR and HP. Slow but can deal devastating physical damage.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Angel Knight</td>
-                                <td class="p-3 align-top">Have a Lawful character with the Archangel's Feather emblem die in battle. They may be reborn.</td>
-                                <td class="p-3 align-top">A powerful, flying holy warrior with high all-around stats and unique abilities to smite evil.</td>
-                            </tr>
-                            <tr class="hover:bg-gray-800/50">
-                                <td class="p-3 font-bold align-top">Lich</td>
-                                <td class="p-3 align-top">Have a powerful Chaotic magic-user die while equipped with the Ring of the Dead.</td>
-                                <td class="p--3 align-top">Undead master of magic with access to forbidden spells. Resurrects after being struck down.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
         </main>
 
         <footer class="text-center mt-10">
@@ -244,5 +80,7 @@
         </footer>
 
     </div>
+</body>
+</html>
 </body>
 </html>
